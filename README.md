@@ -4,7 +4,7 @@
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A research-oriented framework for evaluating and monitoring large language model behavior across safety, capability, consistency, and drift dimensions.
+**A research-oriented framework for evaluating and monitoring large language model behavior across safety, capability, consistency, and drift dimensions.**
 
 ---
 
@@ -15,15 +15,15 @@ Modern large language models behave as **probabilistic, high-dimensional systems
 Three challenges motivate this project:
 
 1. **Static benchmarks miss dynamic behavior.**  
-   Changes in reasoning style, refusal patterns, factual reliability, or tone often go undetected.
+   Shifts in reasoning strategies, refusal patterns, and factual reliability often go undetected.
 
 2. **Safety requires behavioral understanding, not just correctness.**  
-   Harmful response likelihood, jailbreak vulnerability, and boundary adherence must be continuously evaluated.
+   Harmful content likelihood, jailbreak vulnerability, and boundary adherence must be continuously evaluated.
 
 3. **LLM behavior drifts.**  
-   Even without retraining, subtle shifts can propagate downstream and degrade aligned behavior.
+   Even without retraining, subtle changes can propagate downstream and compromise aligned behavior.
 
-The LLM Behavior Evaluation Lab provides a modular framework for empirically characterizing these behaviors through structured evaluation, monitoring, and visualization.
+The **LLM Behavior Evaluation Lab** provides a modular framework for empirically characterizing these behaviors through structured evaluation, monitoring, and visualization.
 
 ---
 
@@ -31,52 +31,50 @@ The LLM Behavior Evaluation Lab provides a modular framework for empirically cha
 
 ### 🔬 Behavioral Evaluation
 Tools for assessing:
-- safety alignment
-- reasoning robustness
-- factual grounding
-- task execution
-- response stability under paraphrasing and context variation
+- Safety alignment  
+- Reasoning robustness  
+- Factual grounding  
+- Task execution  
+- Stability under paraphrasing and context variation  
 
 ### 📊 Drift Monitoring
 Statistical comparisons between baseline and current model outputs, enabling:
-- early detection of regressions
-- impact analysis of model updates
-- longitudinal behavioral tracking
+- Early regression detection  
+- Analysis of update effects  
+- Longitudinal tracking of model behavior  
 
 ### 🛡️ Safety Analysis
 Mechanisms for evaluating:
-- harmful content generation
-- refusal stability
-- prompt-injection susceptibility
-- jailbreak vulnerability
+- Harmful content  
+- Refusal stability  
+- Prompt injection  
+- Jailbreak vulnerability  
 
 ### 📈 Reporting & Visualization
-HTML/PDF reports summarizing:
-- safety heatmaps  
-- capability radar charts  
-- drift statistics (KS, MMD, Wasserstein)  
-- consistency distributions  
+Reports include:
+- Safety heatmaps  
+- Capability radar charts  
+- Drift metrics (KS, MMD, Wasserstein)  
+- Consistency distributions  
 
 ---
 
 ## Project Structure
 
-```
+```text
 llm-behavior-eval-lab/
 ├── src/
 │   ├── evaluators/         # Safety, capability, consistency, bias evaluators
-│   ├── monitors/           # Drift, performance, and safety monitoring modules
+│   ├── monitors/           # Drift, performance, and safety monitoring
 │   ├── metrics/            # Statistical and scoring metric implementations
-│   ├── utils/              # Pipelines, reporting tools, model interfaces
+│   ├── utils/              # Pipelines, reporting, model interfaces
 │   └── __init__.py
 ├── configs/                # YAML configuration files
-├── examples/               # Usage examples and test cases
+├── examples/               # Usage examples and test suites
 ├── tests/                  # Unit tests
 ├── docs/                   # Documentation
 └── pyproject.toml
 ```
-
-The design follows a **modular architecture**: evaluators measure behavior, monitors track changes, metrics quantify differences, and pipelines orchestrate execution.
 
 ---
 
@@ -88,7 +86,7 @@ The design follows a **modular architecture**: evaluators measure behavior, moni
 pip install llm-behavior-eval
 ```
 
-Development mode:
+Development setup:
 
 ```bash
 git clone https://github.com/joannany/llm-behavior-eval-lab.git
@@ -100,7 +98,7 @@ pip install -e ".[dev]"
 
 ## Basic Usage
 
-### 1. Run a Safety Evaluation
+### 1. Safety Evaluation
 
 ```python
 from src.evaluators.safety_evaluator import SafetyEvaluator
@@ -156,8 +154,6 @@ print(report.summary())
 
 ## Configuration
 
-Behavior can be controlled via YAML:
-
 ```yaml
 evaluation:
   model:
@@ -171,86 +167,27 @@ evaluation:
     threshold: 0.05
 ```
 
-This enables reproducible configuration for CI/CD pipelines or research workflows.
-
 ---
 
 ## Core Modules
 
 ### Evaluators (`src/evaluators/`)
-- `safety_evaluator.py` — Harmful content detection, refusal stability  
+- `safety_evaluator.py` — Harmful content & refusal behavior  
 - `capability_evaluator.py` — Reasoning, knowledge, task competence  
 - `consistency_evaluator.py` — Paraphrase invariance, output stability  
-- `bias_evaluator.py` — Demographic and ideological bias detection  
+- `bias_evaluator.py` — Demographic & ideological bias detection  
 - `behavior_evaluator.py` — Multi-dimensional orchestration  
 
 ### Monitors (`src/monitors/`)
-- `drift_monitor.py` — Behavioral drift detection using KS/MMD/Wasserstein  
+- `drift_monitor.py` — KS / MMD / Wasserstein drift detection  
 - `performance_monitor.py` — Latency, token usage, reliability  
-- `safety_monitor.py` — Continuous boundary monitoring  
+- `safety_monitor.py` — Continuous safety boundary monitoring  
 
 ### Utilities & Metrics (`src/utils/`, `src/metrics/`)
 - `evaluation_pipeline.py` — End-to-end evaluation orchestration  
 - `report_generator.py` — HTML/PDF reporting  
-- `model_interface.py` — Abstract provider interface  
-- `metrics.py` — Core statistical metrics  
-
----
-
-## Example Evaluation Workflow
-
-A typical evaluation workflow includes:
-
-1. **Defining the target model**  
-2. **Selecting evaluators** (safety, capability, consistency)  
-3. **Running drift monitors** against historical baselines  
-4. **Generating a report** for analysis or CI/CD gating  
-
-Example:
-
-```python
-from src.utils.evaluation_pipeline import EvaluationPipeline
-from src.evaluators import safety_evaluator, capability_evaluator
-from src.monitors.drift_monitor import DriftMonitor
-
-pipeline = EvaluationPipeline([
-    safety_evaluator.SafetyEvaluator(),
-    capability_evaluator.CapabilityEvaluator(),
-    DriftMonitor(baseline_path="baselines/current.json")
-])
-
-results = pipeline.run(model="your-endpoint", test_cases=800)
-results.to_report("reports/latest.html")
-```
-
----
-
-## Use Cases
-
-- **AI Safety Research**  
-  Evaluation of harmful content generation, refusal behavior, and safety drift.
-
-- **Model Release Validation**  
-  Detect regressions introduced by model updates.
-
-- **LLM Product Quality Assurance**  
-  Validate reasoning, factuality, and output consistency prior to deployment.
-
-- **Research Experimentation**  
-  Controlled studies on behavioral variation across architectures or prompts.
-
----
-
-## Contributing
-
-Contributions are welcome.  
-Please see `docs/CONTRIBUTING.md` for guidelines.
-
----
-
-## License
-
-MIT License. See `LICENSE` for details.
+- `model_interface.py` — Abstract interface for LLM providers  
+- `metrics.py` — Statistical metrics  
 
 ---
 
@@ -259,7 +196,7 @@ MIT License. See `LICENSE` for details.
 ```bibtex
 @software{llm_behavior_eval,
   title={LLM Behavior Evaluation Lab},
-  author={Anna},
+  author={Jo, Anna},
   year={2025},
   url={https://github.com/joannany/llm-behavior-eval-lab}
 }
